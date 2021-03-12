@@ -1,36 +1,17 @@
--- helper functions
-local function invert_table(t)
-  local s = {}
-  for k,v in pairs(t) do
-    s[v] = k
-  end
-  return s
-end
-
-local function merge_tables(t1, t2)
-  local s = {}
-  for k,v in pairs(t1) do
-    s[k] = v
-  end
-
-  for k,v in pairs(t2) do
-    s[k] = v
-  end
-  return s
-end
--- end helpers
-
 local AlternateToggler = {}
 
-local defaultTable = {}
-defaultTable["true"] = "false"
-defaultTable["True"] = "False"
-defaultTable["1"] = "0"
+local defaultTable = {
+  ["true"] = "false",
+  ["True"] = "False",
+  ["1"] = "0"
+}
+
 local userTable = vim.g.at_custom_alternates
 
-local invertedDefaultTable = invert_table(defaultTable)
-local invertedUserTable = invert_table(userTable)
-local mergedTable = merge_tables(merge_tables(defaultTable, invertedDefaultTable), merge_tables(userTable, invertedUserTable))
+vim.tbl_add_reverse_lookup(defaultTable)
+vim.tbl_add_reverse_lookup(userTable)
+
+local mergedTable = vim.tbl_extend("force", defaultTable, userTable)
 
 local function errorHandler(err)
   if not err == nil then
