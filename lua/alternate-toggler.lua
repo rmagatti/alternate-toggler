@@ -3,6 +3,9 @@ local AlternateToggler = {}
 local defaultTable = {
   ["true"] = "false",
   ["True"] = "False",
+  ["TRUE"] = "FALSE",
+  ["Yes"] = "No",
+  ["YES"] = "NO",
   ["1"] = "0"
 }
 
