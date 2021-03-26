@@ -9,7 +9,7 @@ local defaultTable = {
   ["1"] = "0"
 }
 
-local userTable = vim.g.at_custom_alternates
+local userTable = vim.g.at_custom_alternates or {}
 
 vim.tbl_add_reverse_lookup(defaultTable)
 vim.tbl_add_reverse_lookup(userTable)
