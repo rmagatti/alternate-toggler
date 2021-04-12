@@ -35,7 +35,7 @@ Alternate Toggler exposes a single `:ToggleAlternate` command.
 
 **Example mapping:**
 ```viml
-nnoremap <leader>ta :ToggleAlternate<CR>
+nnoremap <Leader>ta :ToggleAlternate<CR>
 ```
 
 # Compatibility
