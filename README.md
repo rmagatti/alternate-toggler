@@ -15,18 +15,23 @@ Any plugin manager should do, I use [Plug](https://github.com/junegunn/vim-plug)
 
 ### Defaults
 This plugin provides a few pre-defined alternate mappings.
-```json
+```lua
 {
-  "true": "false",
-  "True": "False",
-  "1": "0",
+  ["true"] = "false",
+  ["True"] = "False",
+  ["TRUE"] = "FALSE",
+  ["Yes"] = "No",
+  ["YES"] = "NO",
+  ["1"] = "0",
+  ["<"] = ">",
+  ["+"] = "-"
 }
 ```
 
 ### Custom
 You can add more alternates through a global config variable:
 ```viml
-let g:at_custom_alternates = {'Yes': 'No'}
+let g:at_custom_alternates = {'===': '!=='}
 ```
 :warning: WARNING: anything added here will override existing values if the key of the dic is the same as any of the defaults.
 
