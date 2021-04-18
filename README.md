@@ -33,15 +33,23 @@ You can add more alternates through a global config variable:
 ```viml
 let g:at_custom_alternates = {'===': '!=='}
 ```
-:warning: WARNING: anything added here will override existing values if the key of the dic is the same as any of the defaults.
+:warning: WARNING: anything added here will override existing values if the key of the dict is the same as any of the defaults.
 
 # Commands
 Alternate Toggler exposes a single `:ToggleAlternate` command.
 
-**Example mapping:**
+**Example mappings:**
 ```viml
 nnoremap <leader>ta :ToggleAlternate<CR>
 ```
+**OR**
+```viml
+augroup AlternateToggles
+  au!
+  au FileType typescript,viml,lua nnoremap <buffer> <CR> :ToggleAlternate<CR>
+augroup end
+```
+This allows for merely hitting the enter key to toggle an alternate, the caveat is having to specify supported file types manually.
 
 # Compatibility
 Neovim > 0.5
