@@ -1,7 +1,7 @@
 # Alternate Toggler
 Alternate Toggler is a _very_ small plugin for toggling alternate "boolean" values.
 
-<img src="https://github.com/rmagatti/readme-assets/blob/main/alternate-toggler.gif" width="1000" />
+![](https://github.com/rmagatti/readme-assets/blob/main/alternate-toggler.gif)
 
 # Usage
 `:ToggleAlternate` toggles the current word (<cword>) based on a pre-defined map of alternates.
