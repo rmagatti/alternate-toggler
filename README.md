@@ -24,6 +24,11 @@ This plugin provides a few pre-defined alternate mappings.
   ["YES"] = "NO",
   ["1"] = "0",
   ["<"] = ">",
+  ["("] = ")",
+  ["["] = "]",
+  ["{"] = "}",
+  ['"'] = "'",
+  ['""'] = "''",
   ["+"] = "-"
 }
 ```
