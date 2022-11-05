@@ -7,9 +7,27 @@ Alternate Toggler is a _very_ small plugin for toggling alternate "boolean" valu
 `:ToggleAlternate` toggles the current word (<cword>) based on a pre-defined map of alternates.
 
 # Installation
-Any plugin manager should do, I use [Plug](https://github.com/junegunn/vim-plug).
+Any plugin manager should do, I use [Packer](https://github.com/wbthomason/packer.nvim).
 
-`Plug 'rmagatti/alternate-toggler'`
+```lua
+use {
+  'rmagatti/alternate-toggler',
+  config = function()
+    require("alternate-toggler").setup {
+      alternates = {
+        ["=="] = "!="
+      }
+    }
+    
+    vim.keymap.set(
+      "n",
+      "<leader><space>", -- <space><space>
+      "<cmd>lua require('alternate-toggler').toggleAlternate()<CR>"
+    )
+  end,
+  event = { "BufReadPost" }, -- lazy load after reading a buffer
+}
+```
 
 # Configuration
 
@@ -29,7 +47,8 @@ This plugin provides a few pre-defined alternate mappings.
   ["{"] = "}",
   ['"'] = "'",
   ['""'] = "''",
-  ["+"] = "-"
+  ["+"] = "-",
+	["==="] = "!=="
 }
 ```
 
@@ -38,7 +57,17 @@ You can add more alternates through a global config variable:
 ```viml
 let g:at_custom_alternates = {'===': '!=='}
 ```
-:warning: WARNING: anything added here will override existing values if the key of the dict is the same as any of the defaults.
+
+Or through calling the `setup` method of the plugin passing in an `alternates` table in the config.
+```lua
+require("alternate-toggler").setup {
+  alternates = {
+    ["==="] = "!==",
+    ["=="] = "!=",
+  }
+}
+```
+:warning: WARNING: anything added here will override existing values if the key of the dict/table is the same as any of the defaults.
 
 # Commands
 Alternate Toggler exposes a single `:ToggleAlternate` command.
