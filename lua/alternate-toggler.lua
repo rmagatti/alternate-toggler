@@ -15,6 +15,7 @@ local default_table = {
 	['""'] = "''",
 	["+"] = "-",
 	["==="] = "!==",
+	["=="] = "!="
 }
 
 local user_table = vim.g.at_custom_alternates or {}
