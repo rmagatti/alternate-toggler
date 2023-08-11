@@ -33,6 +33,7 @@ end
 
 function AlternateToggler.setup(conf)
 	if type(conf.alternates) == "table" then
+		vim.tbl_add_reverse_lookup(conf.alternates)
 		merged_table = vim.tbl_extend("force", merged_table, conf.alternates)
 	end
 end
