@@ -20,8 +20,13 @@ local default_table = {
 
 local user_table = vim.g.at_custom_alternates or {}
 
-vim.tbl_add_reverse_lookup(default_table)
-vim.tbl_add_reverse_lookup(user_table)
+for k, v in pairs(default_table) do
+	default_table[v] = k
+end
+
+for k, v in pairs(user_table) do
+	user_table[v] = k
+end
 
 local merged_table = vim.tbl_extend("force", default_table, user_table)
 
@@ -33,7 +38,9 @@ end
 
 function AlternateToggler.setup(conf)
 	if type(conf.alternates) == "table" then
-		vim.tbl_add_reverse_lookup(conf.alternates)
+		for k, v in pairs(conf.alternates) do
+		  conf.alternates[v] = k
+		end
 		merged_table = vim.tbl_extend("force", merged_table, conf.alternates)
 	end
 end
