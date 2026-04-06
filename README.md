@@ -1,96 +1,111 @@
 # Alternate Toggler
-Alternate Toggler is a _very_ small plugin for toggling alternate "boolean" values.
+
+A small Neovim plugin for cycling between alternate values.
+
+`true` -> `false`, `public` -> `private` -> `protected` -> `public`, or any custom cycle you define.
 
 ![](https://github.com/rmagatti/readme-assets/blob/main/alternate-toggler.gif)
 
-# Usage
-`:ToggleAlternate` toggles the current word (<cword>) based on a pre-defined map of alternates.
+## How it works
 
-# Installation
-Any plugin manager should do, I use [Packer](https://github.com/wbthomason/packer.nvim).
+`:ToggleAlternate` reads the word under the cursor and replaces it with the next value in its cycle.
 
-```lua
-use {
-  'rmagatti/alternate-toggler',
-  config = function()
-    require("alternate-toggler").setup {
-      alternates = {
-        ["=="] = "!="
-      }
-    }
-    
-    vim.keymap.set(
-      "n",
-      "<leader><space>", -- <space><space>
-      "<cmd>lua require('alternate-toggler').toggleAlternate()<CR>"
-    )
-  end,
-  event = { "BufReadPost" }, -- lazy load after reading a buffer
-}
+Every set of alternates is a **cycle** -- a list of values that wrap around:
+
+```
+{ "true", "false" }                          -- true -> false -> true
+{ "public", "private", "protected" }         -- public -> private -> protected -> public
+{ "info", "warn", "error", "debug" }         -- info -> warn -> error -> debug -> info
 ```
 
-# Configuration
+A 2-element cycle is a simple toggle. A 3+ element cycle moves forward through the list, wrapping back to the start.
 
-### Defaults
-This plugin provides a few pre-defined alternate mappings.
+## Installation
+
+Any plugin manager should do. Example with [lazy.nvim](https://github.com/folke/lazy.nvim):
+
 ```lua
 {
-  ["true"] = "false",
-  ["True"] = "False",
-  ["TRUE"] = "FALSE",
-  ["Yes"] = "No",
-  ["YES"] = "NO",
-  ["1"] = "0",
-  ["<"] = ">",
-  ["("] = ")",
-  ["["] = "]",
-  ["{"] = "}",
-  ['"'] = "'",
-  ['""'] = "''",
-  ["+"] = "-",
-	["==="] = "!=="
+  "rmagatti/alternate-toggler",
+  keys = {
+    { "<leader><space>", "<cmd>ToggleAlternate<CR>", desc = "Toggle alternate" },
+  },
+  config = function()
+    require("alternate-toggler").setup()
+  end,
 }
 ```
 
-### Custom
-You can add more alternates through a global config variable:
-```viml
-let g:at_custom_alternates = {'===': '!=='}
+## Configuration
+
+### Defaults
+
+The plugin works out of the box with these built-in cycles:
+
+```lua
+{ "true", "false" }
+{ "True", "False" }
+{ "TRUE", "FALSE" }
+{ "Yes", "No" }
+{ "YES", "NO" }
+{ "1", "0" }
+{ "<", ">" }
+{ "(", ")" }
+{ "[", "]" }
+{ "{", "}" }
+{ '"', "'" }
+{ '""', "''" }
+{ "+", "-" }
+{ "===", "!==" }
+{ "==", "!=" }
+{ "public", "private", "protected" }
 ```
 
-Or through calling the `setup` method of the plugin passing in an `alternates` table in the config.
+Calling `setup()` with no arguments keeps these defaults:
+
+```lua
+require("alternate-toggler").setup()
+```
+
+### Custom cycles
+
+Pass your own cycles via `setup()`. Each cycle is a list of 2+ strings.
+
 ```lua
 require("alternate-toggler").setup {
   alternates = {
-    ["==="] = "!==",
-    ["=="] = "!=",
+    { "true", "false" },
+    { "Yes", "No" },
+    { "==", "!=" },
+    { "public", "private", "protected" },
+    { "info", "warn", "error", "debug", "trace" },
+    { "left", "center", "right" },
   }
 }
 ```
-:warning: WARNING: anything added here will override existing values if the key of the dict/table is the same as any of the defaults.
 
-# Commands
-Alternate Toggler exposes a single `:ToggleAlternate` command.
+> **Note:** Providing `alternates` fully **replaces** the defaults. Include any defaults you want to keep.
 
-**Example mappings:**
-```viml
-nnoremap <leader>ta :ToggleAlternate<CR>
-```
-**OR**
-```viml
-augroup AlternateToggles
-  au!
-  au FileType typescript,viml,lua nnoremap <buffer> <CR> :ToggleAlternate<CR>
-augroup end
-```
-This allows for merely hitting the enter key to toggle an alternate, the caveat is having to specify supported file types manually.
+## Commands
 
-# Compatibility
-Neovim > 0.5
+`:ToggleAlternate` -- cycle the word under the cursor to its next alternate value.
 
-Tested with:
+## Migrating from v1
+
+v2 is a breaking change. Alternates are now lists of cycles instead of key-value pairs, and support cycling through 3+ values.
+
+```lua
+-- v1 (no longer supported)
+setup { alternates = { ["true"] = "false" } }
+
+-- v2
+setup { alternates = { { "true", "false" } } }
 ```
-NVIM v0.5.0-dev+a1ec36f
-Build type: Release
-LuaJIT 2.1.0-beta3
-```
+
+Other changes:
+- `vim.g.at_custom_alternates` is removed. Use `setup()` instead.
+- The deprecated string argument to `toggleAlternate()` is removed.
+
+## Compatibility
+
+Neovim >= 0.5

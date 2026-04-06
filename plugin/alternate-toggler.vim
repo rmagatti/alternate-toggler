@@ -6,7 +6,7 @@ set cpo&vim " reset them to defaults
 let LuaToggleAlternate = luaeval('require("alternate-toggler").toggleAlternate')
 
 " Available commands
-command! -nargs=* ToggleAlternate call LuaToggleAlternate()
+command! -nargs=0 ToggleAlternate call LuaToggleAlternate()
 
 let &cpo = s:save_cpo " and restore after
 unlet s:save_cpo
